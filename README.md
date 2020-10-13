@@ -1,7 +1,7 @@
 docker-compose-install
 =========
 
-A brief description of the role goes here.
+This role installs docker engine, docker SDK and docker compose on target host 
 
 Requirements
 ------------
