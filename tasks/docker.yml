@@ -69,10 +69,25 @@
   become_method: sudo
 
 # sudo groupadd docker
-- name: Create "docker" group
+- name: Ensure "docker" group is created
   group:
     name: docker
     state: present
+  tags:
+    - docker
+  become: true
+  become_method: sudo
+
+- name: Get current username
+  shell: whoami
+  register: username_on_the_host
+
+# sudo usermod -aG docker vagrant
+- name: Add "vagrant" user to "docker" group
+  user:
+    name: "{{ username_on_the_host.stdout }}"
+    group: docker
+    append: yes
   tags:
     - docker
   become: true
@@ -88,7 +103,7 @@
     - docker
   become: true
   become_method: sudo
-
+  
 # # Download docker-compose via curl
 # - name: Install docker-compose
 #   remote_user: ubuntu
