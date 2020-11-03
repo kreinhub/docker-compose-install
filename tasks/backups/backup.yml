@@ -1,0 +1,121 @@
+
+# sudo apt-get update
+# - name: Update apt packages
+#   apt:
+#     update_cache: yes
+#   tags:
+#     - docker
+#   become: true
+#   become_method: sudo
+
+
+# # whoami
+# - name: Get username
+#   shell: whoami
+#   register: username_on_the_host
+
+# - name: Print username
+#   debug:
+#     msg: "{{ username_on_the_host }}"
+
+# # sudo usermod -aG docker deploy vagrant
+# - name: Add remote "deploy" and "vagrant" users to "docker" group
+#   user:
+#     name: "{{ item }}"
+#     group: docker
+#     append: yes
+#   loop:
+#    - deploy
+#    - "{{ username_on_the_host.stdout }}"  
+#   become: true
+#   become_method: sudo
+
+
+# Install Docker-compose
+- name: Install docker-compose python package
+  pip:
+    name: docker-compose
+
+    # Install Docker SDK
+- name: Install docker python package
+  pip:
+    name: docker
+
+
+# # Download docker-compose via curl
+# - name: Install docker-compose
+#   remote_user: ubuntu
+#   get_url: 
+#     url : https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-x86_64
+#     dest: /usr/local/bin/docker-compose
+#     mode: 'u+x,g+x'
+
+#  debug:
+#    msg: 
+#      - "{{ docker_registry.url }}"
+#      - "{{ docker_registry.user }}"
+#      - "{{ docker_registry.password }}"
+
+
+
+# # sudo groupadd docker deploy
+# - name: Ensure "docker" and "deploy" groups are created
+#   group:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - docker
+#     - deploy
+#   tags:
+#     - docker
+#   become: true
+#   become_method: sudo
+
+# whoami
+#- name: Get current username
+#  shell: whoami
+#  register: username_on_the_host
+
+# sudo usermod -aG docker deploy vagrant
+#- name: Add remote "deploy" and "vagrant" users to "docker" group
+#  user:
+#    name: "{{ item }}"
+#    group: docker
+#    append: yes
+#  loop:
+#   - deploy
+#   - "{{ username_on_the_host.stdout }}"
+#  tags:
+#    - docker
+#  become: true
+#  become_method: sudo
+
+
+    # - name: Get username
+    #   shell: whoami
+    #   register: username_on_the_host
+
+    # - name: Print username
+    #   debug:
+    #     msg:
+    #     - "{{ username_on_the_host.stdout  }}"
+
+
+    - name: Docker debug | Get _register
+      uri:
+        unix_socket: /var/run/docker.sock
+        url: http://docker/version
+      register: _result
+
+    - name: Docker debug | Print _register
+      debug:
+        msg: "{{ _result }}"
+
+
+    # - name: Debug groups having 
+    #   shell: "groups {{ ansible_user }}" 
+    #   register: vagrant_groups
+
+    # - name: Print groups
+    #   debug:
+    #     msg: "{{ vagrant_groups.stdout  }}"

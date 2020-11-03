@@ -1,10 +1,7 @@
-# This playbook contains common handlers that can be called in "docker-compose" tasks.
-
-# sudo systemctl enable docker
-- name: Start docker on boot
-  systemd:
+---
+- name: restart docker
+  become: yes
+  service:
     name: docker
-    state: started
-    enabled: yes
-  become: true
-  become_method: sudo
+    state: restarted
+  when: docker_first_start is not changed
